@@ -1,0 +1,145 @@
+{
+  "info": {
+    "name": "API REST - Transações",
+    "description": "Coleção de endpoints da API REST para gerenciamento de transações",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Transações",
+      "item": [
+        {
+          "name": "Listar Todas as Transações",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/transacoes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "transacoes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Nova Transação",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Supermercado\",\n  \"valor\": 250.50,\n  \"data\": \"2026-05-24\",\n  \"tipo\": \"DESPESA\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/transacoes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "transacoes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Transação por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/transacoes/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "transacoes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Transação",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Supermercado - Atualizado\",\n  \"valor": 300.00,\n  \"data\": \"2026-05-24\",\n  \"tipo\": \"DESPESA\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/transacoes/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "transacoes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Transação",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/transacoes/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "transacoes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
