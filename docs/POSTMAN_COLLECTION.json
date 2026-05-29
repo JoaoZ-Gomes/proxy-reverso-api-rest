@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "API REST - Transações",
-    "description": "Coleção de endpoints da API REST para gerenciamento de transações",
+    "description": "Coleção para testar CRUD de transações via Proxy Reverso (Nginx)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,78 +9,56 @@
       "name": "Transações",
       "item": [
         {
-          "name": "Listar Todas as Transações",
+          "name": "Listar Todas",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "url": {
-              "raw": "http://localhost:8080/transacoes",
+              "raw": "http://192.168.1.10/transacoes",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "transacoes"
-              ]
+              "host": ["192", "168", "1", "10"],
+              "port": "80",
+              "path": ["transacoes"]
             }
           },
           "response": []
         },
         {
-          "name": "Criar Nova Transação",
+          "name": "Criar Transação",
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"descricao\": \"Supermercado\",\n  \"valor\": 250.50,\n  \"data\": \"2026-05-24\",\n  \"tipo\": \"DESPESA\"\n}"
+              "raw": "{\n  \"descricao\": \"Professor Fulano\",\n  \"valor\": 100.00,\n  \"data\": \"2026-05-29\",\n  \"tipo\": \"RECEITA\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8080/transacoes",
+              "raw": "http://192.168.1.10/transacoes",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "transacoes"
-              ]
+              "host": ["192", "168", "1", "10"],
+              "port": "80",
+              "path": ["transacoes"]
             }
           },
           "response": []
         },
         {
-          "name": "Buscar Transação por ID",
+          "name": "Buscar por ID",
           "request": {
             "method": "GET",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "url": {
-              "raw": "http://localhost:8080/transacoes/1",
+              "raw": "http://192.168.1.10/transacoes/1",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "transacoes",
-                "1"
-              ]
+              "host": ["192", "168", "1", "10"],
+              "port": "80",
+              "path": ["transacoes", "1"]
             }
           },
           "response": []
@@ -90,26 +68,18 @@
           "request": {
             "method": "PUT",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"descricao\": \"Supermercado - Atualizado\",\n  \"valor": 300.00,\n  \"data\": \"2026-05-24\",\n  \"tipo\": \"DESPESA\"\n}"
+              "raw": "{\n  \"descricao\": \"Professor Fulano Atualizado\",\n  \"valor\": 200.00,\n  \"data\": \"2026-05-29\",\n  \"tipo\": \"DESPESA\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8080/transacoes/1",
+              "raw": "http://192.168.1.10/transacoes/1",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "transacoes",
-                "1"
-              ]
+              "host": ["192", "168", "1", "10"],
+              "port": "80",
+              "path": ["transacoes", "1"]
             }
           },
           "response": []
@@ -119,22 +89,14 @@
           "request": {
             "method": "DELETE",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+              { "key": "Content-Type", "value": "application/json" }
             ],
             "url": {
-              "raw": "http://localhost:8080/transacoes/1",
+              "raw": "http://192.168.1.10/transacoes/1",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "transacoes",
-                "1"
-              ]
+              "host": ["192", "168", "1", "10"],
+              "port": "80",
+              "path": ["transacoes", "1"]
             }
           },
           "response": []

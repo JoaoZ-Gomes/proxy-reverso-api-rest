@@ -1,6 +1,13 @@
--- Estrutura da tabela "transacoes" no PostgreSQL.
--- O Hibernate cria automaticamente via ddl-auto=update, este script serve de referência.
+-- Rodar na VM 2 após instalar o PostgreSQL local.
+-- Executar como: sudo -u postgres psql -f init.sql
 
+-- Criar o banco de dados
+CREATE DATABASE transacoes_db;
+
+-- Conectar ao banco criado
+\c transacoes_db
+
+-- Criar a tabela
 CREATE TABLE IF NOT EXISTS transacoes (
     id BIGSERIAL PRIMARY KEY,
     descricao VARCHAR(255) NOT NULL,
@@ -22,16 +29,5 @@ INSERT INTO transacoes (descricao, valor, data, tipo) VALUES
 ('Freelance', 800.00, '2026-05-22', 'RECEITA'),
 ('Conta de Luz', 180.00, '2026-05-21', 'DESPESA');
 
+-- Verificar dados
 SELECT * FROM transacoes ORDER BY data DESC;
-
--- Consultas de saldo
-SELECT SUM(valor) as total_receitas FROM transacoes WHERE tipo = 'RECEITA';
-SELECT SUM(valor) as total_despesas FROM transacoes WHERE tipo = 'DESPESA';
-
-SELECT
-    (SELECT SUM(valor) FROM transacoes WHERE tipo = 'RECEITA') as total_receitas,
-    (SELECT SUM(valor) FROM transacoes WHERE tipo = 'DESPESA') as total_despesas,
-    (SELECT SUM(valor) FROM transacoes WHERE tipo = 'RECEITA') -
-    (SELECT SUM(valor) FROM transacoes WHERE tipo = 'DESPESA') as saldo;
-
--- DROP TABLE IF EXISTS transacoes;

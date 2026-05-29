@@ -11,45 +11,56 @@
 
 ## IPs das Máquinas Virtuais
 
-| VM | Função | IP | Porta |
-|----|--------|----|-------|
+| Máquina | Função | IP | Porta |
+|---------|--------|----|-------|
+| Cliente | Notebook do colega (faz as requisições) | 192.168.1.X | — |
 | VM 1 | Nginx (Proxy Reverso) | 192.168.1.10 | 80 |
-| VM 2 | API REST (Spring Boot) | 192.168.1.100 | 8080 |
+| VM 2 | API REST (Spring Boot) + PostgreSQL local | 192.168.1.100 | 8080 |
 
-**Banco de dados:** PostgreSQL hospedado no Neon Cloud.
+**Banco de dados:** PostgreSQL instalado localmente na VM 2.
 
 **Fluxo da requisição:**
 ```
-Cliente (PC) ──► VM 1 (Nginx, 192.168.1.10:80) ──► VM 2 (API, 192.168.1.100:8080) ──► PostgreSQL (Neon Cloud)
+Cliente (notebook colega) ──► VM 1 (Nginx, 192.168.1.10:80) ──► VM 2 (API + PostgreSQL, 192.168.1.100:8080)
 ```
 
 ---
 
 ## Guia de Execução
 
-### VM 2 — Rodar a API
+### VM 2 — Instalar PostgreSQL e Rodar a API
 
 ```bash
 # 1. Instalar Java 21
 sudo apt-get update
 sudo apt-get install -y openjdk-21-jdk
 
-# 2. Clonar o repositório
+# 2. Instalar PostgreSQL local
+sudo apt-get install -y postgresql postgresql-contrib
+
+# 3. Criar o banco de dados e a tabela
+sudo -u postgres psql -f database/init.sql
+
+# 4. (Opcional) Definir senha do usuário postgres
+sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
+
+# 5. Clonar o repositório
 git clone <url-do-repositorio>
 cd api
 
-# 3. Configurar conexão com o banco de dados
-#    Editar src/main/resources/application.properties com a URL, usuário e senha do PostgreSQL.
-#    O arquivo já vem configurado para o Neon Cloud.
+# 6. Verificar application.properties — já configurado para banco local:
+#    spring.datasource.url=jdbc:postgresql://localhost:5432/transacoes_db
+#    spring.datasource.username=postgres
+#    spring.datasource.password=postgres
 
-# 4. Iniciar a API
+# 7. Iniciar a API
 ./mvnw spring-boot:run
 
 # Saída esperada:
 #   Started ApiApplication in X.XXX seconds
 #   Tomcat started on port 8080
 
-# 5. Testar se está funcionando
+# 8. Testar localmente
 curl http://localhost:8080/transacoes
 ```
 
@@ -83,35 +94,50 @@ sudo systemctl restart nginx
 curl http://192.168.1.10/transacoes
 ```
 
+### Cliente (Notebook do Colega)
+
+O colega faz as requisições apontando para o IP da VM 1 (proxy).
+O cliente **não** acessa a VM 2 diretamente.
+
+```bash
+# Testar via proxy
+curl http://192.168.1.10/transacoes
+
+# Criar transação
+curl -X POST http://192.168.1.10/transacoes \
+  -H "Content-Type: application/json" \
+  -d '{"descricao":"Salário","valor":3000.00,"data":"2026-05-29","tipo":"RECEITA"}'
+```
+
 ---
 
 ## Teste do Fluxo Completo
 
 ```bash
-# Verificar comunicação entre VMs
+# 1. Verificar comunicação entre VMs
 ping 192.168.1.100   # Da VM 1 para VM 2
 ping 192.168.1.10    # Da VM 2 para VM 1
 
-# Testar API direto na VM 2
+# 2. Testar API direto na VM 2
 curl http://192.168.1.100:8080/transacoes
 
-# Testar via proxy (VM 1)
+# 3. Testar via proxy (VM 1)
 curl http://192.168.1.10/transacoes
 
-# Criar transação via proxy
+# 4. Do notebook do colega (cliente externo) — acessar apenas a VM 1
+curl http://192.168.1.10/transacoes
+
+# 5. CRUD completo via proxy
 curl -X POST http://192.168.1.10/transacoes \
   -H "Content-Type: application/json" \
-  -d '{"descricao":"Salário","valor":3000.00,"data":"2026-05-24","tipo":"RECEITA"}'
+  -d '{"descricao":"Salário","valor":3000.00,"data":"2026-05-29","tipo":"RECEITA"}'
 
-# Buscar por ID
 curl http://192.168.1.10/transacoes/1
 
-# Atualizar
 curl -X PUT http://192.168.1.10/transacoes/1 \
   -H "Content-Type: application/json" \
-  -d '{"descricao":"Salário Atualizado","valor":3500.00,"data":"2026-05-24","tipo":"RECEITA"}'
+  -d '{"descricao":"Salário Atualizado","valor":3500.00,"data":"2026-05-29","tipo":"RECEITA"}'
 
-# Deletar
 curl -X DELETE http://192.168.1.10/transacoes/1
 ```
 
@@ -130,7 +156,7 @@ curl -X DELETE http://192.168.1.10/transacoes/1
 │       └── repository/
 │           └── TransacaoRepository.java  # Acesso ao banco
 ├── database/
-│   └── init.sql                          # SQL de criação do banco
+│   └── init.sql                          # SQL de criação do banco e tabela
 ├── nginx/
 │   └── api.conf                          # Configuração do proxy reverso
 └── docs/
@@ -157,8 +183,7 @@ Documentação completa: [docs/ROTAS.md](docs/ROTAS.md)
 ## Tecnologias
 
 - **Java 21** + **Spring Boot 4.0.6** + **Maven**
-- **PostgreSQL** (Neon Cloud)
+- **PostgreSQL** (local na VM 2)
 - **Hibernate/JPA**
 - **Nginx** (Proxy Reverso)
 - **Ubuntu Server 22.04 / Debian 12**
->>>>>>> master

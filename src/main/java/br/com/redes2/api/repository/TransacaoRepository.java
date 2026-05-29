@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import br.com.redes2.api.model.Transacao;
 
 /**
- * Acesso à tabela "transacoes" no banco neondb (Neon Cloud).
+ * Acesso à tabela "transacoes" no banco local transacoes_db (VM 2).
  * CRUD completo herdado do JpaRepository — usado pelo TransacaoController.
  */
 @Repository
